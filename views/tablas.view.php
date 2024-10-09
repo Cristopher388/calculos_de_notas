@@ -16,46 +16,55 @@
             </div>
             <div class="card-body">
                 <form action="" method="post">
-                    <label for=""></label>
-                    <textarea class="form-control" id="numeros" name="numeros"
-                              rows="3"><?php echo $data['input_numbers'] ?? ''; ?></textarea>
-                    <p class="text-danger small"><?php echo $data['errors']['numeros'] ?? '' ?></p>
+                    <div class="mb-3 col-12">
+                        <label for="textarea">Inserte una cadena de texto formada por número separados por comas</label>
+                        <textarea class="form-control" id="data" name="data"
+                                  rows="3"><?php echo $data['data'] ?? ''; ?></textarea>
+                        <?php if (isset($data['errors'])){ ?>
+                            <?php foreach ($data['errors'] as $error){ ?>
+                                <p class="text-danger small"><?php echo $error ?? ''; ?></p>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Enviar" name="enviar2" class="btn btn-primary">
+                    </div>
                 </form>
-                <table id="miTabla" class="table table-bordered dataTable">
-                    <thead>
-                        <tr>
-                            <th>Campo 1</th>
-                            <th>Campo 2</th>
-                            <th>Campo 3</th>
-                            <th>Campo 4</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Prueba 1</td>
-                            <td>Test 1</td>
-                            <td>V1</td>
-                            <td>Data 1</td>
-                        </tr>
-                        <tr>
-                            <td>Prueba 2</td>
-                            <td>Test 2</td>
-                            <td>V2</td>
-                            <td>Data 2</td>
-                        </tr>
-                        <tr>
-                            <td>Prueba 3</td>
-                            <td>Test 3</td>
-                            <td>V3</td>
-                            <td>Data 3</td>
-                        </tr>
-                        <tr>
-                            <td>Prueba 4</td>
-                            <td>Test 4</td>
-                            <td>V4</td>
-                            <td>Data 4</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <?php if(isset($data['informacion_clase'])){ ?>
+                    <table id="miTabla" class="table table-bordered dataTable">
+                        <thead>
+                            <tr>
+                                <th>Módulo</th>
+                                <th>Media</th>
+                                <th>Aprobados</th>
+                                <th>Suspensos</th>
+                                <th>Máximo</th>
+                                <th>Mínimo</th>
+                        </thead>
+                        <tbody>
+                            <?php
+                                foreach ($data['informacion_clase'] as $asignaturas => $info){
+                                    echo "<tr>";
+                                    echo "<td>".$asignaturas."</td>";
+                                    echo "<td>".$info['media']."</td>";
+                                    echo "<td>".$info['aprobados']."</td>";
+                                    echo "<td>".$info['suspensos']."</td>";
+                                    echo "<td>";
+                                        foreach ($info['max']['alumnos']as $alumnos){
+                                            echo "<p>".$alumnos.": ".$info['max']['nota']."</p>";
+                                        }
+                                    echo "</td>";
+                                    echo "<td>";
+                                        foreach ($info['min']['alumnos']as $alumnos){
+                                            echo "<p>".$alumnos.": ".$info['min']['nota']."</p>";
+                                        }
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                <?php } ?>
             </div>
         </div>
     </div>                        

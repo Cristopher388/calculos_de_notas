@@ -21,22 +21,20 @@ if(!empty($_POST)){
             $data['informacion_clase'][$asignatura]['suspensos'] = count(array_filter($alumnos, function($nota){ return $nota < 5;}));
             $data['informacion_clase'][$asignatura]['aprobados'] = count(array_filter($alumnos, function($nota) { return $nota >= 5;}));
             $data['informacion_clase'][$asignatura]['min']['nota'] = min($alumnos);
+            $data['informacion_clase'][$asignatura]['min']['alumnos'] = [];
             foreach ($alumnos as $alumno => $nota) {
-                if($data['informacion_clase'][$asignatura]['min']['nota'] === $nota){
-                    $data['informacion_clase'][$asignatura]['min']['nota'][] = $alumno;
+                if($data['informacion_clase'][$asignatura]['min']['nota'] == $nota){
+                    $data['informacion_clase'][$asignatura]['min']['alumnos'][] = $alumno;
                 }
             }
-            $data['informacion_clase'][$asignatura]['max']['nota'] = min($alumnos);
+            $data['informacion_clase'][$asignatura]['max']['nota'] = max($alumnos);
+            $data['informacion_clase'][$asignatura]['max']['alumnos'] = [];
             foreach ($alumnos as $alumno => $nota) {
-                if($data['informacion_clase'][$asignatura]['max']['nota'] === $nota){
-                    $data['informacion_clase'][$asignatura]['max']['nota'][] = $alumno;
+                if($data['informacion_clase'][$asignatura]['max']['nota'] == $nota){
+                    $data['informacion_clase'][$asignatura]['max']['alumnos'][] = $alumno;
                 }
             }
-            var_dump($data['informacion_clase']);
-
         }
-
-        var_dump(json_decode($_POST['data'],true));
     }
     //si bien procesar
 
