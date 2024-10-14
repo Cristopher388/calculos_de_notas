@@ -13,32 +13,73 @@ if(!empty($_POST)){
         $data['errors'] = $errors;
     }
     else{
-        $todas_las_notas = json_decode($_POST['data'],true);
+        $todas_las_notas = json_decode($_POST['data'], true);
         $data['informacion_clase'] = [];
+        $alumnos = [];
+        $alumnosSuspensos = [];
         foreach ($todas_las_notas as $asignatura => $alumnos) {
-            asort($alumnos);
-            $data['informacion_clase'][$asignatura]['media'] = array_sum($alumnos)/count($alumnos);
-            $data['informacion_clase'][$asignatura]['suspensos'] = count(array_filter($alumnos, function($nota){ return $nota < 5;}));
-            $data['informacion_clase'][$asignatura]['aprobados'] = count(array_filter($alumnos, function($nota) { return $nota >= 5;}));
-            $data['informacion_clase'][$asignatura]['min']['nota'] = min($alumnos);
-            $data['informacion_clase'][$asignatura]['min']['alumnos'] = [];
-            foreach ($alumnos as $alumno => $nota) {
-                if($data['informacion_clase'][$asignatura]['min']['nota'] == $nota){
+            $sumatorio = 0;
+            $suspensos = 0;
+            $aprobados = 0;
+            $notaMax = -1;
+            $notaMin = 11;
+            $alumnosMax = [];
+            $alumnosMin = [];
+            foreach ($alumnos as $alumno => $notas) {
+                $nota = round((array_sum($notas))/count($notas),2);
+                $sumatorio += $nota;
+                if(!isset($alumnosSuspensos[$alumno])){
+                    $alumnosSuspensos[$alumno] = 0;
+                }
+                $alumnos[$alumno][$asignatura] = $nota;
+                if ($nota < 5){
+                    $alumnosSuspensos[$alumno]++;
+                    $suspensos++;
+                }else{
+                    $aprobados++;
+                }
+                if($notaMax < $nota){
+                    $notaMax = $nota;
+                }
+                if($notaMin > $nota){
+                    $notaMin = $nota;
+                }
+            }
+            foreach ($alumnos as $alumno => $notas) {
+                $nota = round(array_sum($notas)/count($notas),2);
+                if($notaMax == $nota){
+                    $data['informacion_clase'][$asignatura]['max']['alumnos'][] = $alumno;
+                }
+                if($notaMin == $nota){
                     $data['informacion_clase'][$asignatura]['min']['alumnos'][] = $alumno;
                 }
             }
-            $data['informacion_clase'][$asignatura]['max']['nota'] = max($alumnos);
-            $data['informacion_clase'][$asignatura]['max']['alumnos'] = [];
-            foreach ($alumnos as $alumno => $nota) {
-                if($data['informacion_clase'][$asignatura]['max']['nota'] == $nota){
-                    $data['informacion_clase'][$asignatura]['max']['alumnos'][] = $alumno;
-                }
+            $data['informacion_clase'][$asignatura]['media'] = $sumatorio/count($alumnos);
+            $data['informacion_clase'][$asignatura]['aprobados'] = $aprobados;
+            $data['informacion_clase'][$asignatura]['suspensos'] = $suspensos;
+            $data['informacion_clase'][$asignatura]['max']['nota'] = $notaMax;
+            $data['informacion_clase'][$asignatura]['min']['nota'] = $notaMin;
+
+
+        }
+
+        $data['todoAprobado'] = [];
+        $data['promocionan'] = [];
+        $data['noPromocionan'] = [];
+        foreach ($alumnosSuspensos as $alumno => $suspensos){
+            if($suspensos == 0){
+                $data['todoAprobado'][] = $alumno;
+            }else if($suspensos == 1){
+                $data['promocionan'][] = $alumno;
+            }else{
+                $data['noPromocionan'][] = $alumno;
             }
         }
+        var_dump($data['informacion_clase']);
+        var_dump($data['todoAprobado']);
+        var_dump($data['promocionan']);
+        var_dump($data['noPromocionan']);
     }
-    //si bien procesar
-
-    //si mal enviar
 }
 
 
@@ -61,11 +102,15 @@ function checkForm(array $data) : array
             }elseif(empty($alumnos)||!is_array($alumnos)){
                 $errors[] = 'No se a detectado ninguna lista de alumnos en la asignatura '.$asignatura;
             }else{
-                foreach ($alumnos as $alumno => $nota) {
+                foreach ($alumnos as $alumno => $notas) {
                     if(empty($alumno)||!is_string($alumno)){
                         $errors[] = 'El nombre del alumno '.$alumno.' de la asignatura '.$asignatura.' no es valida';
-                    }elseif(!is_numeric($nota) || $nota < 0 || $nota > 10){
-                        $errors[] = 'la nota '.$nota.' del alumno '.$alumno.' de la asignatura '.$asignatura.' no es valida';
+                    }else{
+                        foreach ($notas as $nota) {
+                            if(!is_numeric($nota) || $nota < 0 || $nota > 10){
+                                $errors[] = 'la nota '.$nota.' del alumno '.$alumno.' de la asignatura '.$asignatura.' no es valida';
+                            }
+                        }
                     }
                 }
             }
