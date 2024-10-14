@@ -75,10 +75,6 @@ if(!empty($_POST)){
                 $data['noPromocionan'][] = $alumno;
             }
         }
-        var_dump($data['informacion_clase']);
-        var_dump($data['todoAprobado']);
-        var_dump($data['promocionan']);
-        var_dump($data['noPromocionan']);
     }
 }
 

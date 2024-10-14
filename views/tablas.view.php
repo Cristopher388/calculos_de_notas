@@ -7,7 +7,80 @@
 <!-- Content Row -->
 
 <div class="row">
-
+    <?php if(isset($data['informacion_clase'])){ ?>
+        <div class="col-12">
+            <table id="miTabla" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Módulo</th>
+                    <th>Media</th>
+                    <th>Aprobados</th>
+                    <th>Suspensos</th>
+                    <th>Máximo</th>
+                    <th>Mínimo</th>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($data['informacion_clase'] as $asignaturas => $info){
+                    echo "<tr>";
+                    echo "<td>".$asignaturas."</td>";
+                    echo "<td>".$info['media']."</td>";
+                    echo "<td>".$info['aprobados']."</td>";
+                    echo "<td>".$info['suspensos']."</td>";
+                    echo "<td>";
+                    foreach ($info['max']['alumnos']as $alumnos){
+                        echo "<p>".$alumnos.": ".$info['max']['nota']."</p>";
+                    }
+                    echo "</td>";
+                    echo "<td>";
+                    foreach ($info['min']['alumnos']as $alumnos){
+                        echo "<p>".$alumnos.": ".$info['min']['nota']."</p>";
+                    }
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <div class="alert alert-success">
+                <?php foreach ($data['todoAprobado'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }?>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="alert alert-info">
+                <?php foreach ($data['todoAprobado'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }
+                foreach ($data['promocionan'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }
+                ?>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="alert alert-warning">
+                <?php foreach ($data['noPromocionan'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }
+                foreach ($data['promocionan'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }
+                ?>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="alert alert-danger">
+                <?php foreach ($data['noPromocionan'] as $alumno) {
+                    echo "<p>".$alumno."</p>";
+                }
+                ?>
+            </div>
+        </div>
+    <?php } ?>
     <div class="col-12">
         <div class="card shadow mb-4">
             <div
@@ -30,67 +103,7 @@
                         <input type="submit" value="Enviar" name="enviar2" class="btn btn-primary">
                     </div>
                 </form>
-                <?php if(isset($data['informacion_clase'])){ ?>
-                    <div class="col-12">
-                        <table id="miTabla" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Módulo</th>
-                                    <th>Media</th>
-                                    <th>Aprobados</th>
-                                    <th>Suspensos</th>
-                                    <th>Máximo</th>
-                                    <th>Mínimo</th>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    foreach ($data['informacion_clase'] as $asignaturas => $info){
-                                        echo "<tr>";
-                                        echo "<td>".$asignaturas."</td>";
-                                        echo "<td>".$info['media']."</td>";
-                                        echo "<td>".$info['aprobados']."</td>";
-                                        echo "<td>".$info['suspensos']."</td>";
-                                        echo "<td>";
-                                            foreach ($info['max']['alumnos']as $alumnos){
-                                                echo "<p>".$alumnos.": ".$info['max']['nota']."</p>";
-                                            }
-                                        echo "</td>";
-                                        echo "<td>";
-                                            foreach ($info['min']['alumnos']as $alumnos){
-                                                echo "<p>".$alumnos.": ".$info['min']['nota']."</p>";
-                                            }
-                                        echo "</td>";
-                                        echo "</tr>";
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-lg-6 alert-success">
-                        <?php foreach ($data['todoAprobado'] as $alumno) {
-                            echo "<p>".$alumno."</p>";
-                        }?>
-                    </div>
-                    <div class="col-lg-6 alert-success">
-                        <?php foreach ($data['todoAprobado'] as $alumno) {
-                            echo "<p>".$alumno."</p>";
-                        }
-                        foreach ($data['promocionan'] as $alumno) {
-                            echo "<p>".$alumno."</p>";
-                        }
-                        ?>
-                    </div>
-                    <div class="col-lg-6 alert-success">
-                        <?php foreach ($data['todoAprobado'] as $alumno) {
-                            echo "<p>".$alumno."</p>";
-                        }?>
-                    </div>
-                    <div class="col-lg-6 alert-success">
-                        <?php foreach ($data['todoAprobado'] as $alumno) {
-                            echo "<p>".$alumno."</p>";
-                        }?>
-                    </div>
-                <?php } ?>
+
             </div>
         </div>
     </div>                        
