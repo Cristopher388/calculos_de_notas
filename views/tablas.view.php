@@ -43,14 +43,14 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-4">
+        <div class="col-lg-6">
             <div class="alert alert-success">
                 <?php foreach ($data['todoAprobado'] as $alumno) {
                     echo "<p>".$alumno."</p>";
                 }?>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-6">
             <div class="alert alert-info">
                 <?php foreach ($data['todoAprobado'] as $alumno) {
                     echo "<p>".$alumno."</p>";
@@ -61,7 +61,7 @@
                 ?>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-6">
             <div class="alert alert-warning">
                 <?php foreach ($data['noPromocionan'] as $alumno) {
                     echo "<p>".$alumno."</p>";
@@ -72,7 +72,7 @@
                 ?>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-lg-6">
             <div class="alert alert-danger">
                 <?php foreach ($data['noPromocionan'] as $alumno) {
                     echo "<p>".$alumno."</p>";

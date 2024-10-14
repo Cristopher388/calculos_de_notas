@@ -54,7 +54,7 @@ if(!empty($_POST)){
                     $data['informacion_clase'][$asignatura]['min']['alumnos'][] = $alumno;
                 }
             }
-            $data['informacion_clase'][$asignatura]['media'] = $sumatorio/count($alumnos);
+            $data['informacion_clase'][$asignatura]['media'] = round($sumatorio/count($alumnos),2);
             $data['informacion_clase'][$asignatura]['aprobados'] = $aprobados;
             $data['informacion_clase'][$asignatura]['suspensos'] = $suspensos;
             $data['informacion_clase'][$asignatura]['max']['nota'] = $notaMax;
